@@ -30,6 +30,7 @@
     "grunt-replace": "^1.0.1"
   },
   "dependencies": {
+    "grunt": "^1.2.1",
     "coffeescript": "^2.5.1"
   },
   "scripts": {
