@@ -6,7 +6,7 @@ app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/index.html'));
 });
 
-app.get('/img', function(req, res) {
+app.get('/img/', function(req, res) {
     res.sendFile(path.join(__dirname + '/Asteroid1.png'));
 });
 
