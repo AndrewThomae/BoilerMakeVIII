@@ -96,8 +96,7 @@ module.exports = function(grunt) {
     connect: {
       server: {
         options: {
-          host: 'going2.space',
-          port: 8000,
+          port: process.env.PORT,
           keepalive: false,
           base: './build/'
         }
