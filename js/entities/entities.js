@@ -9,9 +9,7 @@ game.PlayerEntity = me.Entity.extend({
     init:function (x, y, settings) {
         // call the constructor
         this._super(me.Entity, 'init', [x, y , settings]);
-    },
-
-    // max velocities
+        // max velocities
     this.body.setMaxVelocity(3, 15);
     this.body.setFriction(0.4, 0);
 
@@ -29,6 +27,9 @@ game.PlayerEntity = me.Entity.extend({
 
     // set the resting animation as default
     this.renderable.setCurrentAnimation("rest");
+    },
+
+    
 
     /**
      * update the entity
@@ -69,4 +70,4 @@ game.PlayerEntity = me.Entity.extend({
         return true;
     }
 });
-/
+
