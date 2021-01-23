@@ -7,9 +7,7 @@ app.get('/', function(req, res) {
 });
 
 app.get('/img/SpacemanL.png', function(req, res) {
-    res.sendFile(path.join(__dirname), () => {
-        console.log('error');
-    });
+    res.sendFile(path.join(__dirname));
 });
 
 app.listen(process.env.PORT || 8000);
