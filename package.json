@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "grunt": "^1.2.1",
-    "grunt": "^1.2.1",
     "grunt-asar": "github:bwin/grunt-asar#update-asar",
     "grunt-contrib-clean": "^2.0.0",
     "grunt-contrib-concat": "^1.0.1",
