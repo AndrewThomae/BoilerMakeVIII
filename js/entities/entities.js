@@ -9,12 +9,69 @@ game.PlayerEntity = me.Entity.extend({
     init:function (x, y, settings) {
         // call the constructor
         this._super(me.Entity, 'init', [x, y , settings]);
+
+        // max x and y speed
+        this.body.setMaxVelocity(8, 10);
+        this.body.setFriction(0.4, 0);
+
+        // set the display to follow position on both axis
+        me.game.viewport.follow(this.pos, me.game.viewport.AXIS.BOTH, 0.4);
+
+        // ensure that the player is updated even when outside of the viewport
+        this.alwaysUpdate = true;
+
+        // define a basic walking animation (using all frames)
+        this.renderable.addAnimation("jump", [0, 1, 2, 3, 4, 5, 6, 7]);
+
+        // define a resting animation (using the first frame)
+        this.renderable.addAnimation("rest", [0]);
+
+        // set the resting animation as default
+        this.renderable.setCurrentAnimation("rest");
     },
 
     /**
      * update the entity
      */
     update : function (dt) {
+
+        if (me.input.isKeyPressed('left')) {
+
+            // flip the sprite on horizontal axis
+            this.renderable.flipX(true);
+            // update the default force
+            this.body.force.x = -this.body.maxVel.x;
+            // change to the walking animation
+            if (!this.renderable.isCurrentAnimation("walk")) {
+                this.renderable.setCurrentAnimation("walk");
+            }
+        } else if (me.input.isKeyPressed('right')) {
+
+            // unflip the sprite
+            this.renderable.flipX(false);
+            // update the entity velocity
+            this.body.force.x = this.body.maxVel.x;
+            // change to the walking animation
+            if (!this.renderable.isCurrentAnimation("walk")) {
+                this.renderable.setCurrentAnimation("walk");
+            }
+        } else {
+            this.body.force.x = 0;
+            // change to the standing animation
+            this.renderable.setCurrentAnimation("stand");
+        }
+
+        if (me.input.isKeyPressed('jump')) {
+
+            if (!this.body.jumping && !this.body.falling)
+            {
+                // set current vel to the maximum defined value
+                // gravity will then do the rest
+                this.body.force.y = -this.body.maxVel.y
+            }
+        } else {
+            this.body.force.y = 0;
+        }
 
         // apply physics to the body (this moves the entity)
         this.body.update(dt);

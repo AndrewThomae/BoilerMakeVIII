@@ -12,7 +12,7 @@ var game = {
     // Run on page load.
     "onload" : function () {
         // Initialize the video.
-        if (!me.video.init(960, 640, {parent : "screen", scale : "auto", scaleMethod : "flex"})) {
+        if (!me.video.init(640, 480, {parent : "screen", scale : "auto", scaleMethod : "flex-width"})) {
             alert("Your browser does not support HTML5 canvas.");
             return;
         }
@@ -27,11 +27,16 @@ var game = {
 
     // Run on game resources loaded.
     "loaded" : function () {
-        me.state.set(me.state.MENU, new game.TitleScreen());
+        //me.state.set(me.state.MENU, new game.TitleScreen());
         me.state.set(me.state.PLAY, new game.PlayScreen());
 
         // add our player entity in the entity pool
         me.pool.register("mainPlayer", game.PlayerEntity);
+
+        // enable the keyboard
+        me.input.bindKey(me.input.KEY.LEFT, "left");
+        me.input.bindKey(me.input.KEY.RIGHT, "right");
+        me.input.bindKey(me.input.KEY.SPACE, "jump");
 
         // Start the game.
         me.state.change(me.state.PLAY);
