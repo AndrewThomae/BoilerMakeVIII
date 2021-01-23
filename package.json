@@ -4,7 +4,8 @@
   "description": "This is for BoilerMakeVIII",
   "main": "app.js",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "https": "^1.0.0"
   },
   "devDependencies": {},
   "scripts": {
