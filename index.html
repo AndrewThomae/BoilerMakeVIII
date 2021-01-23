@@ -3,6 +3,13 @@
 </head>
 <canvas id="canvas"></canvas>
 <script>
+   const xhttp = new XMLHttpRequest();
+
+   xhttp.open("GET", 'http://going2.space/img');
+   xhttp.send();
+
+</script>
+<script>
   // The attributes of the player.
   var player = {
     x: 200,
