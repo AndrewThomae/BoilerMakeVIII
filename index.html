@@ -392,11 +392,12 @@
         var y = meteors[i].y;  
         var w = meteors[i].width;
         var h = meteors[i].height;
-        if ((x + w > player.x && y + h > player.y && x < player.x && y < player.y) ||
-            (player.x + player.width > x && player.y + player.y > y &&
-            player.x > x && player.y < y)) {
-            console.log('collided')
-        }
+        if ((player.x > x && player.x < x + w && player.y > y && player.y < y + h) || 
+        (player.x + player.width < x + w && player.x + player.width > x && player.y + player.height > y && player.y + player.height < y + h) ||
+        (player.x + player.width < x + w && player.x + player.width > x && player.y > y && player.y < y + h) ||
+        (player.x < x + w && player.x > x && player.y + player.height > y && player.y + player.height < y + h)) {
+             console.log('collided')
+         }
       }
 
         // Rendering the canvas, the player and the platforms
