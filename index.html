@@ -52,7 +52,8 @@
         right: false,
         height: 128,
         width: 79,
-        fuel: 100
+        fuel: 100,
+        health : 100
     };
     // The status of the arrow keys
     var keys = {
@@ -122,6 +123,12 @@
       ctx.fillRect(250, cHeight - 135, 500, 50);
       ctx.fillStyle = "#42a7f5";
       ctx.fillRect(260, cHeight - 125, (480 * player.fuel) / 100, 30);
+      
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillText("Health", 155, cHeight - 35);
+      ctx.fillRect(250, cHeight - 65, 500, 50);
+      ctx.fillStyle = "#FF0000";
+      ctx.fillRect(260, cHeight - 55, 480 * (player.health / 100), 30);
 
     }
     //function to create meteors
@@ -415,6 +422,7 @@
         (player.x + player.width < x + w && player.x + player.width > x && player.y > y && player.y < y + h) ||
         (player.x < x + w && player.x > x && player.y + player.height > y && player.y + player.height < y + h)) {
              console.log('collided')
+             player.health--;
          }
       }
 
