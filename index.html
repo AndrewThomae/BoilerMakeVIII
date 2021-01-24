@@ -41,6 +41,7 @@
     let frameCounter = 0;
     let start = false;
     let gameover = false;
+    let startmusic = false;
     let points = 0;
     var player = {
         x: 200,
@@ -109,11 +110,11 @@
         }
     }
     function rendervals() {
-      ctx.font = "20px Arial";
+      // ctx.font = "20px Arial";
       ctx.fillStyle = "white";
-      ctx.fillText("gravity: " + gravity.toFixed(3), 0, 20);
-      ctx.fillText("playerVel: " + playerVel.toFixed(3), 0, 50);
-      ctx.fillText("rocketVel: " + rocketVel.toFixed(3), 0, 80);
+      // ctx.fillText("gravity: " + gravity.toFixed(3), 0, 20);
+      // ctx.fillText("playerVel: " + playerVel.toFixed(3), 0, 50);
+      // ctx.fillText("rocketVel: " + rocketVel.toFixed(3), 0, 80);
       ctx.font = "18px Arial";
       ctx.fillText("Use WASD to move, and Space to jump off the rockets and use your jetpack!", (cWidth * 0.6), (cHeight * 0.4));
       ctx.fillText("Avoid the asteroids and try to get the highest score!", (cWidth * 0.6), (cHeight * 0.4 + 40));
@@ -175,9 +176,10 @@
       rendercanvas();
       ctx.font = "100px Arial";
       ctx.fillStyle = "white";
-      ctx.fillText("GAME OVER", cWidth * 0.33, cHeight * 0.5);
+      ctx.fillText("GAME OVER", cWidth * 0.33, cHeight * 0.4);
       ctx.font = "60px Arial";
-      ctx.fillText("Press R to restart...", cWidth * 0.38, cHeight * 0.6);
+      ctx.fillText("Points: " + points.toString(), cWidth * 0.33, cHeight * 0.5);
+      ctx.fillText("Press R to restart...", cWidth * 0.33, cHeight * 0.6);
     }
     //function to create meteors
     function createMeteors() {
@@ -225,8 +227,11 @@
     function startGame() {
       if (!start && !gameover) {
         start = true;
-        music = new sound("https://raw.githubusercontent.com/AndrewThomae/BoilerMakeVIII/main/img/Spacewalk.mp3");
-        music.play();
+        if (!startmusic) {
+          startmusic = true;
+          music = new sound("https://raw.githubusercontent.com/AndrewThomae/BoilerMakeVIII/main/img/Spacewalk.mp3");
+          music.play();
+        }
       }
     }
     // This function will be called when a key on the keyboard is pressed
