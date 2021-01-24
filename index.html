@@ -1,8 +1,8 @@
 <html>
 <head>
 </head>
-<img id="player" width="256" height="256" src="https://i.imgur.com/S57zW2Z.png" style="display: none">
-<img id="rocket" width="256" height="1024" src="https://i.imgur.com/AHBAHIf.png" style="display: none">
+<img id="player" width="256" height="256" src="https://i.imgur.com/S57zW2Z.png" style="display: none;">
+<img id="rocket" width="256" height="1024" src="https://i.imgur.com/AHBAHIf.png" style="display: none;">
 <canvas id="canvas"></canvas>
 <script>
   // The attributes of the player.
@@ -16,8 +16,8 @@
     jump : true,
     ground: true,
     wall: false,
-    height: 256,
-    width: 256
+    height: 128,
+    width: 79
   };
   // The status of the arrow keys
   var keys = {
@@ -50,9 +50,9 @@
       platforms.push(
         {
           x: 700 * i,
-          y: 100,
-          width: 256,
-          height: 1024
+          y: 300,
+          width: 183,
+          height: 617
         }
       );
     }
@@ -118,29 +118,29 @@
     // Ground movement
     if (player.ground) {
       if(keys.left) {
-        player.x_v = -7.5;
+        player.x_v = -10;
       }
       if(keys.right) {
-        player.x_v = 7.5;
+        player.x_v = 10;
       }
       if(keys.jump && !player.jump) {
-        player.y_v = -10;
+        player.y_v = -13;
       }
     } else if (player.wall) {
       player.y_v = 0;
       if (keys.up) {
-        player.y_v = -5;
+        player.y_v = -7.5;
       }
       if (keys.down) {
-        player.y_v = 5;
+        player.y_v = 7.5;
       }
       if (keys.jump) {
-        player.y_v = -10;
+        player.y_v = -13;
         if (keys.left) {
-          player.x_v = -7.5;
+          player.x_v = -10;
         }
         if (keys.right) {
-          player.x_v = 7.5;
+          player.x_v = 10;
         }
         player.wall = false;
         player.ground = true;
@@ -170,7 +170,7 @@
     // x collision
     let wallCollide = false;
     for (let i = 0; i < platforms.length; i++) {
-      if ((platforms[i].y < player.y) && ((player.y + player.height) < (platforms[i].y + platforms[i].height))) {
+      if ((platforms[i].y < (player.y)) && (player.y < (platforms[i].y + platforms[i].height))) {
         if ((platforms[i].x < player.x) && (player.x <= (platforms[i].x + platforms[i].width))) {
           wallCollide = true;
           player.x_v = 0;
