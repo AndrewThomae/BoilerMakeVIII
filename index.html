@@ -68,8 +68,8 @@
     var numPlatforms = 4;
     // The platforms
     var platforms = [];
-    let cWidth = 1525;
-    let cHeight = 840;
+    let cWidth = document.body.clientWidth;
+    let cHeight = document.body.clientHeight;
     // The meteors
     var meteors = [];
     var numMeteors = 4;
@@ -435,6 +435,6 @@
     document.addEventListener("keyup",keyup);
     setInterval(loop,22);
 </script>
-<body>
+<body style="overflow: hidden">
 </body>
 </html>
