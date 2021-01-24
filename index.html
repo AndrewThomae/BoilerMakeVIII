@@ -37,10 +37,12 @@
         down: false
     };
     // The friction and gravity to show realistic movements
-    var gravity = 0.6;
+    var gravity = 0.3;
     var friction = 0;
+    let rocketVel = 3;
+    let playerVel = 10;
     // The number of platforms
-    var num = 2;
+    var num = 4;
     // The platforms
     var platforms = [];
     let cWidth = 1525;
@@ -59,8 +61,8 @@
         for(i = 0; i < num; i++) {
             platforms.push(
                 {
-                    x: 600 * i,
-                    y: 100,
+                    x: 600 * (i % 2),
+                    y: i * (500) - cHeight,
                     width: 100,
                     height: 617
                 }
@@ -69,10 +71,16 @@
     }
     // Function to render platforms
     function renderplat(){
-        //ctx.fillStyle = "#45597E";
         for (let i = 0; i < platforms.length; i++) {
             ctx.drawImage(rocketImage, platforms[i].x, platforms[i].y);
         }
+    }
+    function rendervals() {
+      ctx.font = "20px Arial";
+      ctx.fillStyle = "white";
+      ctx.fillText("gravity: " + gravity.toFixed(3), 0, 20);
+      ctx.fillText("playerVel: " + playerVel.toFixed(3), 0, 50);
+      ctx.fillText("rocketVel: " + rocketVel.toFixed(3), 0, 80);
     }
     // This function will be called when a key on the keyboard is pressed
     function keydown(e) {
@@ -125,6 +133,13 @@
             player.y_v += gravity;
         }
 
+        // see if a platform should be bumped
+        for (let i = 0; i < platforms.length; i++) {
+          if (platforms[i].y > cHeight) {
+            platforms[i].y -= 2000;
+          }
+        }
+
         // Ground movement
         if (player.ground) {
             if(keys.left) {
@@ -140,7 +155,7 @@
                 }
             }
             if(keys.jump && !player.jump) {
-                player.y_v = -13;
+                player.y_v = -12;
             }
         } else if (player.wall) {
             player.y_v = 0;
@@ -151,7 +166,7 @@
                 player.y_v = 7.5;
             }
             if (keys.jump) {
-                player.y_v = -13;
+                player.y_v = -12;
                 if (keys.left) {
                     player.x_v = -10;
                 }
@@ -166,6 +181,21 @@
         // Updating the y and x coordinates of the player
         player.y += player.y_v;
         player.x += player.x_v;
+
+        // Gradually increase difficulty
+        gravity += 0.0001;
+        playerVel += 0.01;
+        rocketVel += 0.001;
+
+        // Update y coordinates of the platforms
+        for (let i = 0; i < platforms.length; i++) {
+          platforms[i].y += rocketVel;
+        }
+
+        // Make player follow rocket if mounted
+        if (player.wall) {
+          player.y += rocketVel;
+        }
 
         // Checks for collisions with the platform
         let collide = -1;
@@ -227,6 +257,7 @@
         rendercanvas();
         renderplayer();
         renderplat();
+        rendervals();
     }
     function flipPlayer() {
         if (player.right) {
