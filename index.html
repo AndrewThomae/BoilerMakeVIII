@@ -37,8 +37,9 @@
     let playerImage = document.getElementById("playerL");
     let rocketImage = document.getElementById("rocket");
     let meteorImage = document.getElementById("meteor");
-    var frameCounter = 0;
+    let frameCounter = 0;
     let start = false;
+    let gameover = false;
     let points = 0;
     var player = {
         x: 200,
@@ -122,7 +123,51 @@
       ctx.fillRect(250, cHeight - 105, 500, 50);
       ctx.fillStyle = "#42a7f5";
       ctx.fillRect(260, cHeight - 95, (480 * player.fuel) / 100, 30);
-
+    }
+    function restart() {
+        gameover = false;
+        start = false;
+        frameCounter = 0;
+        points = 0;
+        player.x = 200;
+        player.y = 400;
+        player.x_v = 0;
+        player.y_v = 0;
+        player.jump = true;
+        player.ground = false;
+        player.wall = true;
+        player.left = true;
+        player.right = false;
+        player.fuel = 100;
+        keys.right = false;
+        keys.left = false;
+        keys.up = false;
+        keys.down = false;
+        gravity = 0.7;
+        friction = 0;
+        rocketVel = 5;
+        playerVel = 8;
+        playerImage = document.getElementById("playerL");
+        for (let i = 0; i < platforms.length; i++) {
+          platforms[i].x = 700 * (i % 2) + 100;
+          platforms[i].y = i * (500) - cHeight
+        }
+        meteors = [];
+        createMeteors();
+        rendercanvas();
+        renderplat();
+        renderplayer();
+        rendervals();
+    }
+    function gameOver() {
+      start = false;
+      gameover = true;
+      rendercanvas();
+      ctx.font = "100px Arial";
+      ctx.fillStyle = "white";
+      ctx.fillText("GAME OVER", cWidth * 0.33, cHeight * 0.5);
+      ctx.font = "60px Arial";
+      ctx.fillText("Press R to restart...", cWidth * 0.4, cHeight * 0.6);
     }
     //function to create meteors
     function createMeteors() {
@@ -168,7 +213,7 @@
         }
     }
     function startGame() {
-      if (!start) {
+      if (!start && !gameover) {
         start = true;
         music = new sound("https://raw.githubusercontent.com/AndrewThomae/BoilerMakeVIII/main/img/Spacewalk.mp3");
         music.play();
@@ -176,29 +221,34 @@
     }
     // This function will be called when a key on the keyboard is pressed
     function keydown(e) {
-        // 37 is the code for the left arrow key
+        // A
         if(e.keyCode == 65) {
             startGame();
             keys.left = true;
         }
-        // 38 is the code for the up arrow key
+        // W
         if(e.keyCode == 87) {
             startGame();
             keys.up = true;
         }
-        // 39 is the code for the right arrow key
+        // D
         if(e.keyCode == 68) {
             startGame();
             keys.right = true;
         }
-        // 40 is the code for the down arrow key
+        // S
         if (e.keyCode == 83) {
             startGame();
             keys.down = true;
         }
+        // Space
         if (e.keyCode == 32) {
             startGame();
             keys.jump = true;
+        }
+        // R
+        if (e.keyCode == 82) {
+          restart();
         }
     }
     // This function is called when the pressed key is released
@@ -414,16 +464,21 @@
         (player.x + player.width < x + w && player.x + player.width > x && player.y + player.height > y && player.y + player.height < y + h) ||
         (player.x + player.width < x + w && player.x + player.width > x && player.y > y && player.y < y + h) ||
         (player.x < x + w && player.x > x && player.y + player.height > y && player.y + player.height < y + h)) {
-             console.log('collided')
+             console.log('collided');
+             if (start) {
+               gameOver();
+             }
          }
       }
 
         // Rendering the canvas, the player and the platforms
-        rendercanvas();
-        renderplayer();
-        renderplat();
-        renderMeteors();
-        rendervals();
+        if (!gameover) {
+          rendercanvas();
+          renderplayer();
+          renderplat();
+          renderMeteors();
+          rendervals();
+        }
     }
     function flipPlayer() {
         if (player.right) {
