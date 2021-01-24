@@ -314,6 +314,19 @@
         player.y = platforms[collide].y - player.height;
       }
 
+      //check if player has collided with a meteor
+      for (i = 0; i < numMeteors; i++) {
+        var x = meteors[i].x;
+        var y = meteors[i].y;  
+        var w = meteors[i].width;
+        var h = meteors[i].height;
+        if ((x + w > player.x && y + h > player.y && x < player.x && y < player.y) ||
+            (player.x + player.width > x && player.y + player.y > y &&
+            player.x > x && player.y < y)) {
+            console.log('collided')
+        }
+      }
+
         // Rendering the canvas, the player and the platforms
         rendercanvas();
         renderplayer();
