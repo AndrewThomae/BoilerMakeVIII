@@ -23,6 +23,7 @@
         this.sound.src = src;
         this.sound.setAttribute("preload", "auto");
         this.sound.setAttribute("controls", "none");
+        this.sound.setAttribute("loop", "true");
         this.sound.style.display = "none";
         document.body.appendChild(this.sound);
         this.play = function(){
@@ -212,10 +213,12 @@
             player.x_v *= friction;
             player.y_v *= friction;
           } else if (!player.wall) {
-            // If the player is in the air then apply the effect of gravity
+            // Jetpack
             if (keys.jump) {
-              player.y_v += (gravity / 3);
+              jetPlayer();
+              player.y_v -= (gravity / 3);
             } else {
+              unjetPlayer();
               player.y_v += gravity;
             }
           }
@@ -255,16 +258,29 @@
             }
             if (keys.jump) {
               if (player.right && !keys.right) {
+                flipPlayer();
                 player.y_v = (0 - 1.4) * playerVel;
                 player.x_v = 0 - playerVel;
-              }
-              if (player.left && !keys.left) {
+              } else  if (player.left && !keys.left) {
+                flipPlayer();
                 player.y_v = (0 - 1.4) * playerVel;
                 player.x_v = playerVel;
               }
               player.wall = false;
               player.ground = true;
             }
+          }
+
+          // Max velocities
+          if (player.y_v > playerVel) {
+            player.y_v = playerVel;
+          } else if (player.y_v < (0 - playerVel)) {
+            player.y_v = (0 - playerVel);
+          }
+          if (player.x_v > playerVel) {
+            player.x_v = playerVel;
+          } else if (player.x_v < (0 - playerVel)) {
+            player.x_v = (0 - playerVel);
           }
 
           // Updating the y and x coordinates of the player
@@ -388,6 +404,20 @@
         playerImage = document.getElementById("playerR");
       } else {
         playerImage = document.getElementById("playerL");
+      }
+    }
+    function jetPlayer() {
+      if (player.right) {
+        playerImage = document.getElementById("playerJetR");
+      } else {
+        playerImage = document.getElementById("playerJetL");
+      }
+    }
+    function unjetPlayer() {
+      if (player.right) {
+        playerImage = document.getElementById("playerJR");
+      } else {
+        playerImage = document.getElementById("playerJL");
       }
     }
     canvas=document.getElementById("canvas");
