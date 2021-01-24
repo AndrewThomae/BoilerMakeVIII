@@ -210,6 +210,10 @@
     }
 
     function loop() {
+      cWidth = document.body.clientWidth;
+      cHeight = document.body.clientHeight;
+      ctx.canvas.height = cHeight;
+      ctx.canvas.width = cWidth;
         if (start) {
           frameCounter++;
           // If the player is not jumping apply the effect of friction
