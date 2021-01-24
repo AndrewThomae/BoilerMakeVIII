@@ -6,6 +6,7 @@
 <img id="playerJR" width="256" height="256" src="https://i.imgur.com/MMqC5ai.png" style="display: none;">
 <img id="playerJL" width="256" height="256" src="https://i.imgur.com/uvBHziq.png" style="display: none;">
 <img id="rocket" width="256" height="1024" src="https://i.imgur.com/rdvf7kI.png" style="display: none;">
+<img id="meteor" width="128" height="128" src="https://i.imgur.com/Du26Xlu.png" style="display: none;">
 <canvas id="canvas"></canvas>
 <style>
     html {
@@ -16,6 +17,7 @@
     // The attributes of the player.
     let playerImage = document.getElementById("playerL");
     let rocketImage = document.getElementById("rocket");
+    let meteorImage = document.getElementById("meteor");
     var player = {
         x: 100,
         y: 400,
@@ -36,13 +38,17 @@
         up: false,
         down: false
     };
+    // The meteors
+    var meteors = [];
+    var numMeteors = 4;
+    var meteorRandomX = [0, cWidth / 5, 2 * cWidth / 5, 3 * cWidth / 5, 4 * cWidth / 5, cwidth];
     // The friction and gravity to show realistic movements
-    var gravity = 0.3;
+    var gravity = 0.4;
     var friction = 0;
     let rocketVel = 3;
     let playerVel = 10;
     // The number of platforms
-    var num = 4;
+    var numPlatforms = 2;
     // The platforms
     var platforms = [];
     let cWidth = 1525;
@@ -58,7 +64,7 @@
     }
     // Function to create platforms
     function createplat() {
-        for(i = 0; i < num; i++) {
+        for(i = 0; i < numPlatforms; i++) {
             platforms.push(
                 {
                     x: 600 * (i % 2),
@@ -81,6 +87,38 @@
       ctx.fillText("gravity: " + gravity.toFixed(3), 0, 20);
       ctx.fillText("playerVel: " + playerVel.toFixed(3), 0, 50);
       ctx.fillText("rocketVel: " + rocketVel.toFixed(3), 0, 80);
+    //function to create meteors
+    function createMeteors() {
+        for (i = 0; i < numMeteors; i++) {
+            var spawn = Math.floor(Math.random() * 7);
+            var dest = Math.floor(Math.random() * 7);
+            meteors.push({
+                x: meteorRandomX[spawn],
+                y: -300,
+                startX: meteorRandomX[spawn],
+                startY: -300,
+                destX: neteorRandomX[dest],
+                destY: 1100,
+                width: 128,
+                height: 128,
+            });
+        }
+    }
+    // function to move and draw the meteors
+    function renderMeteors() {
+        for (i = 0; i < numMeteors; i++) {
+            meteors[i].x += (meteors[i].destX - meteors[i].startX) / 255;
+            meteors[i].y += 6.222;
+            if (meteors[i].y > 850) {
+                var spawn = Math.floor(Math.random() * 7);
+                var dest = Math.floor(Math.random() * 7);
+                meteors[i].x = meteorRandomX[spawn];
+                meteors[i].startX = meteorRandomX[spawn];
+                meteors[i].destX = meteorRandomX[dest];
+                meteors[i].y = -300;
+            }
+            ctx.drawImage(meteorImage, meteors[i].x, meteors[i].y);
+        }
     }
     // This function will be called when a key on the keyboard is pressed
     function keydown(e) {
@@ -257,6 +295,7 @@
         rendercanvas();
         renderplayer();
         renderplat();
+        renderMeteors();
         rendervals();
     }
     function flipPlayer() {
