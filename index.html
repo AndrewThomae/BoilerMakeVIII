@@ -39,7 +39,7 @@
         down: false
     };
     // The friction and gravity to show realistic movements
-    var gravity = 0.3;
+    var gravity = 0.7;
     var friction = 0;
     let rocketVel = 5;
     let playerVel = 8;
@@ -169,7 +169,11 @@
             player.y_v *= friction;
         } else if (!player.wall) {
             // If the player is in the air then apply the effect of gravity
-            player.y_v += gravity;
+            if (keys.jump) {
+              player.y_v += (gravity / 3);
+            } else {
+              player.y_v += gravity;
+            }
         }
 
         // see if a platform should be bumped
@@ -194,18 +198,18 @@
                 }
             }
             if(keys.jump && !player.jump) {
-                player.y_v = -12.5;
+                player.y_v = (0 - 1.4) * playerVel;
             }
         } else if (player.wall) {
             player.y_v = 0;
             if (keys.up) {
-                player.y_v = (0 - 2) * rocketVel;
+                player.y_v = (0 - 1.5) * rocketVel;
             }
             if (keys.down) {
                 player.y_v = rocketVel;
             }
             if (keys.jump) {
-                player.y_v = -12.5;
+                player.y_v = (0 - 1.4) * playerVel;
                 if (keys.left) {
                     player.x_v = 0 - playerVel;
                 }
@@ -222,7 +226,7 @@
         player.x += player.x_v;
 
         // Gradually increase difficulty
-        gravity += 0.0005;
+        gravity += 0.001;
         playerVel += 0.005;
         rocketVel += 0.003;
 
