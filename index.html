@@ -39,7 +39,7 @@
         down: false
     };
     // The friction and gravity to show realistic movements
-    var gravity = 0.4;
+    var gravity = 0.3;
     var friction = 0;
     let rocketVel = 5;
     let playerVel = 8;
@@ -51,7 +51,7 @@
     let cHeight = 840;
     // The meteors
     var meteors = [];
-    var numMeteors = 4;
+    var numMeteors = 6;
     var meteorRandomX = [0, cWidth / 5, 2 * cWidth / 5, 3 * cWidth / 5, 4 * cWidth / 5, cWidth];
     // Function to render the canvas
     function rendercanvas(){
@@ -98,7 +98,7 @@
                 y: -300,
                 startX: meteorRandomX[spawn],
                 startY: -300,
-                destX: neteorRandomX[dest],
+                destX: meteorRandomX[dest],
                 destY: 1100,
                 width: 128,
                 height: 128,
@@ -330,6 +330,7 @@
     ctx.canvas.height = cHeight;
     ctx.canvas.width = cWidth;
     createplat();
+    createMeteors();
     // Adding the event listeners
     document.addEventListener("keydown",keydown);
     document.addEventListener("keyup",keyup);
