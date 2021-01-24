@@ -108,6 +108,10 @@
       ctx.fillText("gravity: " + gravity.toFixed(3), 0, 20);
       ctx.fillText("playerVel: " + playerVel.toFixed(3), 0, 50);
       ctx.fillText("rocketVel: " + rocketVel.toFixed(3), 0, 80);
+      ctx.font = "15px Arial";
+      ctx.fillText("Use WASD to move, and Space to jump off the rockets and use your jetpack!", 970, 300);
+      ctx.fillText("Avoid the asteroids and try to get the highest score!", 1050, 340);
+      ctx.fillText("We recommend you press F11 for fullscreen mode!", 1050, 380);
     }
     //function to create meteors
     function createMeteors() {
