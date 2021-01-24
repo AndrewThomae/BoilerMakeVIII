@@ -10,6 +10,7 @@
 <img id="playerJetR" width="256" height="256" src="https://i.imgur.com/yu0YydF.png" style="display: none;">
 <img id="playerJetL" width="256" height="256" src="https://i.imgur.com/LCUOLdN.png" style="display: none;">
 <img id="startButton" width="256" height="256" src="https://i.imgur.com/vWejMnc.png" style="display: none;">
+<button id="restart" onclick="restart()" hidden>Restart</button>
 
 <canvas id="canvas"></canvas>
 <style>
@@ -53,7 +54,8 @@
         right: false,
         height: 128,
         width: 79,
-        fuel: 100
+        fuel: 100,
+        health : 100
     };
     // The status of the arrow keys
     var keys = {
@@ -124,6 +126,12 @@
       ctx.fillRect(250, cHeight - 105, 500, 50);
       ctx.fillStyle = "#42a7f5";
       ctx.fillRect(260, cHeight - 95, (480 * player.fuel) / 100, 30);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillText("Health", 155, cHeight - 35);
+      ctx.fillRect(250, cHeight - 65, 500, 50);
+      ctx.fillStyle = "#FF0000";
+      ctx.fillRect(260, cHeight - 55, 480 * (player.health / 100), 30);
+
     }
     function restart() {
         gameover = false;
@@ -464,7 +472,7 @@
               (player.x + player.width < x + w && player.x + player.width > x && player.y > y && player.y < y + h) ||
               (player.x < x + w && player.x > x && player.y + player.height > y && player.y + player.height < y + h)) {
               console.log('collided');
-              gameOver();
+              player.health--;
             }
           }
         }
