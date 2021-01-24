@@ -388,6 +388,10 @@
           } if (player.y > cHeight - 20) {
             player.y = cHeight - 20;
             player.y_v = 0;
+            player.health--;
+            if (player.health <= 0) {
+                gameOver();
+            }
           } if (player.y < -70) {
             player.y = -70;
             player.y_v = 0;
@@ -479,7 +483,7 @@
               (player.x < x + w && player.x > x && player.y + player.height > y && player.y + player.height < y + h)) {
               console.log('collided');
               player.health--;
-              if (player.health == 0) {
+              if (player.health <= 0) {
                 gameOver();
               }
             }
