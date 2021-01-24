@@ -73,8 +73,8 @@
     var numPlatforms = 4;
     // The platforms
     var platforms = [];
-    let cWidth = 1525;
-    let cHeight = 840;
+    let cWidth = document.body.clientWidth;
+    let cHeight = document.body.clientHeight;
     // The meteors
     var meteors = [];
     var numMeteors = 4;
@@ -113,6 +113,10 @@
       ctx.fillText("gravity: " + gravity.toFixed(3), 0, 20);
       ctx.fillText("playerVel: " + playerVel.toFixed(3), 0, 50);
       ctx.fillText("rocketVel: " + rocketVel.toFixed(3), 0, 80);
+      ctx.font = "15px Arial";
+      ctx.fillText("Use WASD to move, and Space to jump off the rockets and use your jetpack!", 970, 300);
+      ctx.fillText("Avoid the asteroids and try to get the highest score!", 1050, 340);
+      ctx.fillText("We recommend you press F11 for fullscreen mode!", 1050, 380);
     }
     //function to create meteors
     function createMeteors() {
@@ -211,6 +215,10 @@
     }
 
     function loop() {
+      cWidth = document.body.clientWidth;
+      cHeight = document.body.clientHeight;
+      ctx.canvas.height = cHeight;
+      ctx.canvas.width = cWidth;
         if (start) {
           frameCounter++;
           // If the player is not jumping apply the effect of friction
@@ -436,6 +444,6 @@
     document.addEventListener("keyup",keyup);
     setInterval(loop,22);
 </script>
-<body>
+<body style="overflow: hidden">
 </body>
 </html>
