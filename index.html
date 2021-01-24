@@ -13,233 +13,247 @@
     }
 </style>
 <script>
-  // The attributes of the player.
-  let playerImage = document.getElementById("playerR");
-  let rocketImage = document.getElementById("rocket");
-  var player = {
-    x: 200,
-    y: 0,
-    x_v: 0,
-    y_v: 0,
-    jump : true,
-    ground: true,
-    wall: false,
-    left: false,
-    right: true,
-    height: 128,
-    width: 79
-  };
-  // The status of the arrow keys
-  var keys = {
-    right: false,
-    left: false,
-    up: false,
-    down: false
-  };
-  // The friction and gravity to show realistic movements
-  var gravity = 0.6;
-  var friction = 0;
-  // The number of platforms
-  var num = 2;
-  // The platforms
-  var platforms = [];
-  let cWidth = 1525;
-  let cHeight = 840;
-  // Function to render the canvas
-  function rendercanvas(){
-    ctx.fillStyle = "#000000";
-    ctx.fillRect(0, 0, cWidth, cHeight);
-  }
-  // Function to render the player
-  function renderplayer() {
-    ctx.drawImage(playerImage, player.x, player.y);
-  }
-  // Function to create platforms
-  function createplat() {
-    for(i = 0; i < num; i++) {
-      platforms.push(
-        {
-          x: 600 * i,
-          y: 100,
-          width: 100,
-          height: 617
+    // The attributes of the player.
+    let playerImage = document.getElementById("playerR");
+    let rocketImage = document.getElementById("rocket");
+    var player = {
+        x: 200,
+        y: 0,
+        x_v: 0,
+        y_v: 0,
+        jump : true,
+        ground: true,
+        wall: false,
+        left: false,
+        right: true,
+        height: 128,
+        width: 79
+    };
+    // The status of the arrow keys
+    var keys = {
+        right: false,
+        left: false,
+        up: false,
+        down: false
+    };
+    // The friction and gravity to show realistic movements
+    var gravity = 0.6;
+    var friction = 0;
+    // The number of platforms
+    var num = 2;
+    // The platforms
+    var platforms = [];
+    let cWidth = 1525;
+    let cHeight = 840;
+    // Function to render the canvas
+    function rendercanvas(){
+        ctx.fillStyle = "#000000";
+        ctx.fillRect(0, 0, cWidth, cHeight);
+    }
+    // Function to render the player
+    function renderplayer() {
+        ctx.drawImage(playerImage, player.x, player.y);
+    }
+    // Function to create platforms
+    function createplat() {
+        for(i = 0; i < num; i++) {
+            platforms.push(
+                {
+                    x: 600 * i,
+                    y: 100,
+                    width: 100,
+                    height: 617
+                }
+            );
         }
-      );
     }
-  }
-  // Function to render platforms
-  function renderplat(){
-    //ctx.fillStyle = "#45597E";
-    for (let i = 0; i < platforms.length; i++) {
-      ctx.drawImage(rocketImage, platforms[i].x, platforms[i].y);
-    }
-  }
-  // This function will be called when a key on the keyboard is pressed
-  function keydown(e) {
-    // 37 is the code for the left arrow key
-    if(e.keyCode == 65) {
-      keys.left = true;
-    }
-    // 38 is the code for the up arrow key
-    if(e.keyCode == 87) {
-      keys.up = true;
-    }
-    // 39 is the code for the right arrow key
-    if(e.keyCode == 68) {
-      keys.right = true;
-    }
-    // 40 is the code for the down arrow key
-    if (e.keyCode == 83) {
-      keys.down = true;
-    }
-    if (e.keyCode == 32) {
-      keys.jump = true;
-    }
-  }
-  // This function is called when the pressed key is released
-  function keyup(e) {
-    if(e.keyCode == 65) {
-      keys.left = false;
-    }
-    if(e.keyCode == 87) {
-      keys.up = false;
-    }
-    if(e.keyCode == 68) {
-      keys.right = false;
-    }
-    if (e.keyCode == 83) {
-      keys.down = false;
-    }
-    if (e.keyCode == 32) {
-      keys.jump = false;
-    }
-  }
-
-  function loop() {
-    // If the player is not jumping apply the effect of friction
-    if(player.jump == false) {
-      player.x_v *= friction;
-      player.y_v *= friction;
-    } else if (!player.wall) {
-      // If the player is in the air then apply the effect of gravity
-      player.y_v += gravity;
-    }
-
-    // Ground movement
-    if (player.ground) {
-      if(keys.left) {
-        player.x_v = -10;
-      }
-      if(keys.right) {
-        player.x_v = 10;
-      }
-      if(keys.jump && !player.jump) {
-        player.y_v = -13;
-      }
-    } else if (player.wall) {
-      player.y_v = 0;
-      if (keys.up) {
-        player.y_v = -7.5;
-      }
-      if (keys.down) {
-        player.y_v = 7.5;
-      }
-      if (keys.jump) {
-        player.y_v = -13;
-        if (keys.left) {
-          player.x_v = -10;
+    // Function to render platforms
+    function renderplat(){
+        //ctx.fillStyle = "#45597E";
+        for (let i = 0; i < platforms.length; i++) {
+            ctx.drawImage(rocketImage, platforms[i].x, platforms[i].y);
         }
-        if (keys.right) {
-          player.x_v = 10;
+    }
+    // This function will be called when a key on the keyboard is pressed
+    function keydown(e) {
+        // 37 is the code for the left arrow key
+        if(e.keyCode == 65) {
+            keys.left = true;
         }
-        player.wall = false;
-        player.ground = true;
-      }
+        // 38 is the code for the up arrow key
+        if(e.keyCode == 87) {
+            keys.up = true;
+        }
+        // 39 is the code for the right arrow key
+        if(e.keyCode == 68) {
+            keys.right = true;
+        }
+        // 40 is the code for the down arrow key
+        if (e.keyCode == 83) {
+            keys.down = true;
+        }
+        if (e.keyCode == 32) {
+            keys.jump = true;
+        }
+    }
+    // This function is called when the pressed key is released
+    function keyup(e) {
+        if(e.keyCode == 65) {
+            keys.left = false;
+        }
+        if(e.keyCode == 87) {
+            keys.up = false;
+        }
+        if(e.keyCode == 68) {
+            keys.right = false;
+        }
+        if (e.keyCode == 83) {
+            keys.down = false;
+        }
+        if (e.keyCode == 32) {
+            keys.jump = false;
+        }
     }
 
-    // Updating the y and x coordinates of the player
-    player.y += player.y_v;
-    player.x += player.x_v;
+    function loop() {
+        // If the player is not jumping apply the effect of friction
+        if(player.jump == false) {
+            player.x_v *= friction;
+            player.y_v *= friction;
+        } else if (!player.wall) {
+            // If the player is in the air then apply the effect of gravity
+            player.y_v += gravity;
+        }
 
-    player.jump = true;
-
-    // Checks for collisions with the platform
-    let collide = -1;
-    for (let i = 0; i < platforms.length; i++) {
-      if((platforms[i].x < player.x) && ((player.x + player.width) < (platforms[i].x + platforms[i].width)) &&
-        (platforms[i].y < (player.y + player.height)) && ((player.y + player.height) < (platforms[i].y + platforms[i].height))){
-        collide = i;
-        player.ground = true;
-      }
-    }
-    if (collide > -1) {
-      player.jump = false;
-      player.y = platforms[collide].y - player.height;
-    }
-
-    // x collision
-    let wallCollide = false;
-    for (let i = 0; i < platforms.length; i++) {
-      if ((platforms[i].y < (player.y)) && (player.y < (platforms[i].y + platforms[i].height))) {
-        if ((platforms[i].x < player.x) && (player.x <= (platforms[i].x + platforms[i].width))) {
-          wallCollide = true;
-          player.x_v = 0;
-          player.x = platforms[i].x + platforms[i].width;
-          if (player.right) {
-            flipPlayer();
-          }
-          if (player.jump) {
+        // Ground movement
+        if (player.ground) {
+            if(keys.left) {
+                player.x_v = -10;
+                if (player.right) {
+                    flipPlayer();
+                }
+            }
+            if(keys.right) {
+                player.x_v = 10;
+                if (player.left) {
+                    flipPlayer();
+                }
+            }
+            if(keys.jump && !player.jump) {
+                player.y_v = -13;
+            }
+        } else if (player.wall) {
             player.y_v = 0;
-            player.wall = true;
-            player.ground = false;
-          }
+            if (keys.up) {
+                player.y_v = -7.5;
+            }
+            if (keys.down) {
+                player.y_v = 7.5;
+            }
+            if (keys.jump) {
+                player.y_v = -13;
+                if (keys.left) {
+                    player.x_v = -10;
+                }
+                if (keys.right) {
+                    player.x_v = 10;
+                }
+                player.wall = false;
+                player.ground = true;
+            }
         }
-        if ((platforms[i].x <= player.x + player.width) && (player.x < (platforms[i].x + platforms[i].width))) {
-          wallCollide = true;
-          player.x_v = 0;
-          player.x = platforms[i].x - player.width;
-          if (player.left) {
-            flipPlayer();
-          }
-          if (player.jump) {
-            player.y_v = 0;
-            player.wall = true;
-            player.ground = false;
-          }
+
+        // Updating the y and x coordinates of the player
+        player.y += player.y_v;
+        player.x += player.x_v;
+
+        player.jump = true;
+
+        // Checks for collisions with the platform
+        let collide = -1;
+        for (let i = 0; i < platforms.length; i++) {
+            if((platforms[i].x < player.x) && ((player.x + player.width) < (platforms[i].x + platforms[i].width)) &&
+                (platforms[i].y < (player.y + player.height)) && ((player.y + player.height) < (platforms[i].y + platforms[i].height))){
+                collide = i;
+                player.ground = true;
+            }
         }
-      }
-    }
-    if (!wallCollide) {
-      player.wall = false;
-      player.ground = true;
-    }
+        if (collide > -1) {
+            player.jump = false;
+            player.y = platforms[collide].y - player.height;
+        }
+
+        // x collision
+        let wallCollide = false;
+        for (let i = 0; i < platforms.length; i++) {
+            if ((platforms[i].y < (player.y)) && (player.y < (platforms[i].y + platforms[i].height))) {
+                if ((platforms[i].x < player.x) && (player.x <= (platforms[i].x + platforms[i].width))) {
+                    wallCollide = true;
+                    player.x_v = 0;
+                    player.x = platforms[i].x + platforms[i].width;
+                    if (player.right) {
+                        flipPlayer();
+                    }
+                    if (player.jump) {
+                        player.y_v = 0;
+                        player.wall = true;
+                        player.ground = false;
+                    }
+                }
+                if ((platforms[i].x <= player.x + player.width) && (player.x < (platforms[i].x + platforms[i].width))) {
+                    wallCollide = true;
+                    player.x_v = 0;
+                    player.x = platforms[i].x - player.width;
+                    if (player.left) {
+                        flipPlayer();
+                    }
+                    if (player.jump) {
+                        player.y_v = 0;
+                        player.wall = true;
+                        player.ground = false;
+                    }
+                }
+            }
+        }
+        if (!wallCollide) {
+            player.wall = false;
+            player.ground = true;
+        }
 
 
-    // Rendering the canvas, the player and the platforms
-    rendercanvas();
-    renderplayer();
-    renderplat();
-  }
-  function flipPlayer() {
-    if (player.right) {
-      playerImage = document.getElementById("playerL");
-      player.right = false;
-      player.left = true;
-    } else { 
-      playerImage = document.getElementById("playerR");
-      player.right = true;
-      player.left = false;
+        // Rendering the canvas, the player and the platforms
+        rendercanvas();
+        renderplayer();
+        renderplat();
     }
-  }
-  canvas=document.getElementById("canvas");
-  ctx=canvas.getContext("2d");
-  ctx.canvas.height = cHeight;
-  ctx.canvas.width = cWidth;
-  createplat();
-  // Adding the event listeners
-  document.addEventListener("keydown",keydown);
-  document.addEventListener("keyup",keyup);
-  setInterval(loop,22);
+    function flipPlayer() {
+        if (player.right) {
+            if (player.jump) {
+                playerImage = document.getElementById("playerJL");
+            } else {
+                playerImage = document.getElementById("playerL");
+            }
+            player.right = false;
+            player.left = true;
+        } else {
+            if (player.jump) {
+                playerImage = document.getElementById("playerJR");
+            } else {
+                playerImage = document.getElementById("playerR");
+            }
+            player.right = true;
+            player.left = false;
+        }
+    }
+    canvas=document.getElementById("canvas");
+    ctx=canvas.getContext("2d");
+    ctx.canvas.height = cHeight;
+    ctx.canvas.width = cWidth;
+    createplat();
+    // Adding the event listeners
+    document.addEventListener("keydown",keydown);
+    document.addEventListener("keyup",keyup);
+    setInterval(loop,22);
 </script>
 <body>
 </body>
