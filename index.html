@@ -181,13 +181,13 @@
         // Ground movement
         if (player.ground) {
             if(keys.left) {
-                player.x_v = -10;
+                player.x_v = 0 - playerVel;
                 if (player.right) {
                     flipPlayer();
                 }
             }
             if(keys.right) {
-                player.x_v = 10;
+                player.x_v = playerVel;
                 if (player.left) {
                     flipPlayer();
                 }
@@ -206,10 +206,10 @@
             if (keys.jump) {
                 player.y_v = -12;
                 if (keys.left) {
-                    player.x_v = -10;
+                    player.x_v = 0 - playerVel;
                 }
                 if (keys.right) {
-                    player.x_v = 10;
+                    player.x_v = playerVel;
                 }
                 player.wall = false;
                 player.ground = true;
