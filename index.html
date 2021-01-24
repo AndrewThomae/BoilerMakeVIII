@@ -19,7 +19,7 @@
     let rocketImage = document.getElementById("rocket");
     let meteorImage = document.getElementById("meteor");
     var player = {
-        x: 100,
+        x: 200,
         y: 400,
         x_v: 0,
         y_v: 0,
@@ -67,7 +67,7 @@
         for(i = 0; i < numPlatforms; i++) {
             platforms.push(
                 {
-                    x: 600 * (i % 2),
+                    x: 700 * (i % 2) + 100,
                     y: i * (500) - cHeight,
                     width: 100,
                     height: 617
