@@ -148,6 +148,7 @@
         player.left = true;
         player.right = false;
         player.fuel = 100;
+        player.health = 100;
         keys.right = false;
         keys.left = false;
         keys.up = false;
@@ -473,6 +474,9 @@
               (player.x < x + w && player.x > x && player.y + player.height > y && player.y + player.height < y + h)) {
               console.log('collided');
               player.health--;
+              if (player.health == 0) {
+                gameOver();
+              }
             }
           }
         }
