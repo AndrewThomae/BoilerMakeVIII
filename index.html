@@ -287,6 +287,20 @@
             player.x_v = (0 - playerVel);
           }
 
+          //Making sure no bounds are being broken
+          if (player.x < -70) {
+            player.x = -70;
+            player.x_v = 0;
+          } if (player.x > 1500) {
+            player.x = 1500;
+            player.x_v = 0;
+          } if (player.y > 900) {
+            player.y = 900;
+            player.y_v = 0;
+          } if (player.y < -700) {
+            player.y = -70;
+            player.y_v = 0;
+          }
           // Updating the y and x coordinates of the player
           player.y += player.y_v;
           player.x += player.x_v;
