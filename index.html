@@ -77,6 +77,7 @@
     var meteors = [];
     var numMeteors = 4;
     var meteorRandomX = [0, cWidth / 5, 2 * cWidth / 5, 3 * cWidth / 5, 4 * cWidth / 5, cWidth];
+    createMeteors();
     // Function to render the canvas
     function rendercanvas(){
         ctx.fillStyle = "#000000";
@@ -167,7 +168,7 @@
       ctx.fillStyle = "white";
       ctx.fillText("GAME OVER", cWidth * 0.33, cHeight * 0.5);
       ctx.font = "60px Arial";
-      ctx.fillText("Press R to restart...", cWidth * 0.4, cHeight * 0.6);
+      ctx.fillText("Press R to restart...", cWidth * 0.38, cHeight * 0.6);
     }
     //function to create meteors
     function createMeteors() {
@@ -452,24 +453,21 @@
             player.ground = false;
             player.y = platforms[collide].y - player.height;
           }
+          //check if player has collided with a meteor
+          for (i = 0; i < numMeteors; i++) {
+            var x = meteors[i].x;
+            var y = meteors[i].y;
+            var w = meteors[i].width;
+            var h = meteors[i].height;
+            if ((player.x > x && player.x < x + w && player.y > y && player.y < y + h) ||
+              (player.x + player.width < x + w && player.x + player.width > x && player.y + player.height > y && player.y + player.height < y + h) ||
+              (player.x + player.width < x + w && player.x + player.width > x && player.y > y && player.y < y + h) ||
+              (player.x < x + w && player.x > x && player.y + player.height > y && player.y + player.height < y + h)) {
+              console.log('collided');
+              gameOver();
+            }
+          }
         }
-
-      //check if player has collided with a meteor
-      for (i = 0; i < numMeteors; i++) {
-        var x = meteors[i].x;
-        var y = meteors[i].y;  
-        var w = meteors[i].width;
-        var h = meteors[i].height;
-        if ((player.x > x && player.x < x + w && player.y > y && player.y < y + h) || 
-        (player.x + player.width < x + w && player.x + player.width > x && player.y + player.height > y && player.y + player.height < y + h) ||
-        (player.x + player.width < x + w && player.x + player.width > x && player.y > y && player.y < y + h) ||
-        (player.x < x + w && player.x > x && player.y + player.height > y && player.y + player.height < y + h)) {
-             console.log('collided');
-             if (start) {
-               gameOver();
-             }
-         }
-      }
 
         // Rendering the canvas, the player and the platforms
         if (!gameover) {
@@ -478,6 +476,8 @@
           renderplat();
           renderMeteors();
           rendervals();
+        } else {
+          gameOver();
         }
     }
     function flipPlayer() {
@@ -525,7 +525,6 @@
     ctx.canvas.height = cHeight;
     ctx.canvas.width = cWidth;
     createplat();
-    createMeteors();
     // Adding the event listeners
     document.addEventListener("keydown",keydown);
     document.addEventListener("keyup",keyup);
