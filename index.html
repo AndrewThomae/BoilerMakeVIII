@@ -14,18 +14,18 @@
 </style>
 <script>
     // The attributes of the player.
-    let playerImage = document.getElementById("playerR");
+    let playerImage = document.getElementById("playerL");
     let rocketImage = document.getElementById("rocket");
     var player = {
-        x: 200,
-        y: 0,
+        x: 100,
+        y: 400,
         x_v: 0,
         y_v: 0,
         jump : true,
-        ground: true,
-        wall: false,
-        left: false,
-        right: true,
+        ground: false,
+        wall: true,
+        left: true,
+        right: false,
         height: 128,
         width: 79
     };
