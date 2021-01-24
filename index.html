@@ -206,30 +206,32 @@
                 if (player.right) {
                     flipPlayer();
                 }
-            }
-            if(keys.right) {
+            } else if(keys.right) {
                 player.x_v = playerVel;
                 if (player.left) {
                     flipPlayer();
                 }
+            } else {
+              player.x_v *= 0.95;
             }
             if(keys.jump && !player.jump) {
                 player.y_v = (0 - 1.4) * playerVel;
             }
         } else if (player.wall) {
-            player.y_v = 0;
             if (keys.up) {
-                player.y_v = (0 - 1.5) * rocketVel;
-            }
-            if (keys.down) {
+              player.y_v = (0 - 1.5) * rocketVel;
+            } else if (keys.down) {
                 player.y_v = rocketVel;
+            } else {
+              player.y_v = 0;
             }
             if (keys.jump) {
-                player.y_v = (0 - 1.4) * playerVel;
-                if (keys.left) {
+                if (player.right && !keys.right) {
+                    player.y_v = (0 - 1.4) * playerVel;
                     player.x_v = 0 - playerVel;
                 }
-                if (keys.right) {
+                if (player.left && !keys.left) {
+                    player.y_v = (0 - 1.4) * playerVel;
                     player.x_v = playerVel;
                 }
                 player.wall = false;
@@ -243,7 +245,7 @@
 
         // Gradually increase difficulty
         gravity += 0.001;
-        playerVel += 0.005;
+        playerVel += 0.003;
         rocketVel += 0.003;
 
         // Update y coordinates of the platforms
@@ -254,20 +256,6 @@
         // Make player follow rocket if mounted
         if (player.wall) {
           player.y += rocketVel;
-        }
-
-        // Checks for collisions with the platform
-        let collide = -1;
-        for (let i = 0; i < platforms.length; i++) {
-            if((platforms[i].x < player.x) && ((player.x + player.width) < (platforms[i].x + platforms[i].width)) &&
-                (platforms[i].y < (player.y + player.height)) && ((player.y + player.height) < (platforms[i].y + platforms[i].height))){
-                collide = i;
-                player.ground = true;
-            }
-        }
-        if (collide > -1) {
-            player.ground = false;
-            player.y = platforms[collide].y - player.height;
         }
 
         // x collision
@@ -311,6 +299,21 @@
             player.ground = true;
         }
 
+      player.jump = true;
+      // Checks for vertical collisions with the platform
+      let collide = -1;
+      for (let i = 0; i < platforms.length; i++) {
+        if((platforms[i].x < (player.x + player.width)) && (player.x < (platforms[i].x + platforms[i].width)) &&
+          (platforms[i].y < (player.y + player.height)) && ((player.y + player.height) < (platforms[i].y + platforms[i].height))){
+          collide = i;
+          player.ground = true;
+          player.jump = false;
+        }
+      }
+      if (collide > -1) {
+        player.ground = false;
+        player.y = platforms[collide].y - player.height;
+      }
 
         // Rendering the canvas, the player and the platforms
         rendercanvas();
