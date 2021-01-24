@@ -39,8 +39,8 @@
     // The friction and gravity to show realistic movements
     var gravity = 0.3;
     var friction = 0;
-    let rocketVel = 3;
-    let playerVel = 10;
+    let rocketVel = 5;
+    let playerVel = 8;
     // The number of platforms
     var num = 4;
     // The platforms
@@ -155,18 +155,18 @@
                 }
             }
             if(keys.jump && !player.jump) {
-                player.y_v = -12;
+                player.y_v = -12.5;
             }
         } else if (player.wall) {
             player.y_v = 0;
             if (keys.up) {
-                player.y_v = -7.5;
+                player.y_v = (0 - 2) * rocketVel;
             }
             if (keys.down) {
-                player.y_v = 7.5;
+                player.y_v = rocketVel;
             }
             if (keys.jump) {
-                player.y_v = -12;
+                player.y_v = -12.5;
                 if (keys.left) {
                     player.x_v = 0 - playerVel;
                 }
@@ -183,9 +183,9 @@
         player.x += player.x_v;
 
         // Gradually increase difficulty
-        gravity += 0.0001;
-        playerVel += 0.01;
-        rocketVel += 0.001;
+        gravity += 0.0005;
+        playerVel += 0.005;
+        rocketVel += 0.003;
 
         // Update y coordinates of the platforms
         for (let i = 0; i < platforms.length; i++) {
