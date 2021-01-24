@@ -52,6 +52,7 @@
         right: false,
         height: 128,
         width: 79,
+        fuel: 100
     };
     // The status of the arrow keys
     var keys = {
@@ -115,6 +116,13 @@
       ctx.fillText("We recommend you press F11 for fullscreen mode!", (cWidth * 0.6), (cHeight * 0.4 + 80));
       ctx.font = "36px Arial";
       ctx.fillText("POINTS: " + points, 300, 40);
+      ctx.font = "30px Arial";
+      ctx.fillText("Fuel", 175, cHeight - 100);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(250, cHeight - 135, 500, 50);
+      ctx.fillStyle = "#42a7f5";
+      ctx.fillRect(260, cHeight - 125, (480 * player.fuel) / 100, 30);
+
     }
     //function to create meteors
     function createMeteors() {
@@ -212,6 +220,12 @@
         }
     }
 
+    function fillFuel() {
+      if (player.fuel < 100) {
+        player.fuel += 1;
+      }
+    }
+
     function loop() {
       cWidth = document.body.clientWidth;
       cHeight = document.body.clientHeight;
@@ -226,13 +240,17 @@
             player.y_v *= friction;
           } else if (!player.wall) {
             // Jetpack
-            if (keys.jump) {
+            if (keys.jump && player.fuel > 0) {
               jetPlayer();
               player.y_v -= (gravity / 3);
+              player.fuel -= 1;
             } else {
+              fillFuel()
               unjetPlayer();
               player.y_v += gravity;
             }
+          } else {
+            fillFuel();
           }
 
           // see if a platform should be bumped
