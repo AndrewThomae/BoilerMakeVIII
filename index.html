@@ -128,13 +128,13 @@
     // function to move and draw the meteors
     function renderMeteors() {
         var availableMeteors;
-        if (frameCounter < 40) {
+        if (frameCounter < 250) {
             availableMeteors = 1;
-        } else if (frameCounter > 80 && frameCounter < 120) {
+        } else if (frameCounter > 250 && frameCounter < 500) {
             availableMeteors = 2;
-        } else if (frameCounter > 120 && frameCounter < 160) {
+        } else if (frameCounter > 500 && frameCounter < 750) {
             availableMeteors = 3;
-        } else if (frameCounter > 160) {
+        } else if (frameCounter > 750) {
             availableMeteors = 4;
         }
         for (i = 0; i < availableMeteors; i++) {
