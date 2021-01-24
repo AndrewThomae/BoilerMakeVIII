@@ -4,6 +4,11 @@
 <img id="player" width="256" height="256" src="https://i.imgur.com/S57zW2Z.png" style="display: none;">
 <img id="rocket" width="256" height="1024" src="https://i.imgur.com/hoharlb.png" style="display: none;">
 <canvas id="canvas"></canvas>
+<style>
+    html {
+        background-color: black;
+    }
+</style>
 <script>
   // The attributes of the player.
   let playerImage = document.getElementById("player");
@@ -37,7 +42,7 @@
   let cHeight = 840;
   // Function to render the canvas
   function rendercanvas(){
-    ctx.fillStyle = "#F0F8FF";
+    ctx.fillStyle = "#000000";
     ctx.fillRect(0, 0, cWidth, cHeight);
   }
   // Function to render the player
