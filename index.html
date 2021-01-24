@@ -44,6 +44,7 @@
     let meteorImage = document.getElementById("meteor");
     var frameCounter = 0;
     let start = false;
+    let points = 0;
     var player = {
         x: 200,
         y: 400,
@@ -55,7 +56,8 @@
         left: true,
         right: false,
         height: 128,
-        width: 79
+        width: 79,
+        fuel: 100
     };
     // The status of the arrow keys
     var keys = {
@@ -113,10 +115,19 @@
       ctx.fillText("gravity: " + gravity.toFixed(3), 0, 20);
       ctx.fillText("playerVel: " + playerVel.toFixed(3), 0, 50);
       ctx.fillText("rocketVel: " + rocketVel.toFixed(3), 0, 80);
-      ctx.font = "15px Arial";
-      ctx.fillText("Use WASD to move, and Space to jump off the rockets and use your jetpack!", 970, 300);
-      ctx.fillText("Avoid the asteroids and try to get the highest score!", 1050, 340);
-      ctx.fillText("We recommend you press F11 for fullscreen mode!", 1050, 380);
+      ctx.font = "18px Arial";
+      ctx.fillText("Use WASD to move, and Space to jump off the rockets and use your jetpack!", (cWidth * 0.6), (cHeight * 0.4));
+      ctx.fillText("Avoid the asteroids and try to get the highest score!", (cWidth * 0.6), (cHeight * 0.4 + 40));
+      ctx.fillText("We recommend you press F11 for fullscreen mode!", (cWidth * 0.6), (cHeight * 0.4 + 80));
+      ctx.font = "36px Arial";
+      ctx.fillText("POINTS: " + points, 300, 40);
+      ctx.font = "30px Arial";
+      ctx.fillText("Fuel", 175, cHeight - 70);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(250, cHeight - 105, 500, 50);
+      ctx.fillStyle = "#42a7f5";
+      ctx.fillRect(260, cHeight - 95, (480 * player.fuel) / 100, 30);
+
     }
     //function to create meteors
     function createMeteors() {
@@ -214,6 +225,12 @@
         }
     }
 
+    function fillFuel() {
+      if (player.fuel < 100) {
+        player.fuel += 1;
+      }
+    }
+
     function loop() {
       cWidth = document.body.clientWidth;
       cHeight = document.body.clientHeight;
@@ -221,19 +238,24 @@
       ctx.canvas.width = cWidth;
         if (start) {
           frameCounter++;
+          points++;
           // If the player is not jumping apply the effect of friction
           if(player.jump == false) {
             player.x_v *= friction;
             player.y_v *= friction;
           } else if (!player.wall) {
             // Jetpack
-            if (keys.jump) {
+            if (keys.jump && player.fuel > 0) {
               jetPlayer();
               player.y_v -= (gravity / 3);
+              player.fuel -= 1;
             } else {
+              fillFuel()
               unjetPlayer();
               player.y_v += gravity;
             }
+          } else {
+            fillFuel();
           }
 
           // see if a platform should be bumped
@@ -296,6 +318,20 @@
             player.x_v = (0 - playerVel);
           }
 
+          //Making sure no bounds are being broken
+          if (player.x < -50) {
+            player.x = -50;
+            player.x_v = 0;
+          } if (player.x > cWidth - 60) {
+            player.x = cWidth - 60;
+            player.x_v = 0;
+          } if (player.y > cHeight - 20) {
+            player.y = cHeight - 20;
+            player.y_v = 0;
+          } if (player.y < -70) {
+            player.y = -70;
+            player.y_v = 0;
+          }
           // Updating the y and x coordinates of the player
           player.y += player.y_v;
           player.x += player.x_v;
@@ -379,11 +415,12 @@
         var y = meteors[i].y;  
         var w = meteors[i].width;
         var h = meteors[i].height;
-        if ((x + w > player.x && y + h > player.y && x < player.x && y < player.y) ||
-            (player.x + player.width > x && player.y + player.y > y &&
-            player.x > x && player.y < y)) {
-            document.getElementById('restart').hidden = false;
-        }
+        if ((player.x > x && player.x < x + w && player.y > y && player.y < y + h) || 
+        (player.x + player.width < x + w && player.x + player.width > x && player.y + player.height > y && player.y + player.height < y + h) ||
+        (player.x + player.width < x + w && player.x + player.width > x && player.y > y && player.y < y + h) ||
+        (player.x < x + w && player.x > x && player.y + player.height > y && player.y + player.height < y + h)) {
+             console.log('collided')
+         }
       }
 
         // Rendering the canvas, the player and the platforms
