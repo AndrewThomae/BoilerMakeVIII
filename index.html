@@ -9,7 +9,7 @@
   let playerImage = document.getElementById("player");
   let rocketImage = document.getElementById("rocket");
   var player = {
-    x: 100,
+    x: 300,
     y: 0,
     x_v: 0,
     y_v: 0,
@@ -30,7 +30,7 @@
   var gravity = 0.6;
   var friction = 0;
   // The number of platforms
-  var num = 3;
+  var num = 2;
   // The platforms
   var platforms = [];
   let cWidth = 1910;
@@ -42,7 +42,6 @@
   }
   // Function to render the player
   function renderplayer() {
-    //ctx.fillStyle = "#F08080";
     ctx.drawImage(playerImage, player.x, player.y);
   }
   // Function to create platforms
@@ -50,7 +49,7 @@
     for(i = 0; i < num; i++) {
       platforms.push(
         {
-          x: 300 * i + 50,
+          x: 700 * i,
           y: 100,
           width: 256,
           height: 1024
@@ -84,7 +83,7 @@
       keys.down = true;
     }
     if (e.keyCode == 32) {
-        keys.jump = true;
+      keys.jump = true;
     }
   }
   // This function is called when the pressed key is released
@@ -102,9 +101,10 @@
       keys.down = false;
     }
     if (e.keyCode == 32) {
-          keys.jump = false;
-      }
+      keys.jump = false;
+    }
   }
+
   function loop() {
     // If the player is not jumping apply the effect of friction
     if(player.jump == false) {
@@ -118,26 +118,32 @@
     // Ground movement
     if (player.ground) {
       if(keys.left) {
-        player.x_v = -5;
+        player.x_v = -7.5;
       }
       if(keys.right) {
-        player.x_v = 5;
+        player.x_v = 7.5;
       }
       if(keys.jump && !player.jump) {
-          player.y_v = -10;
+        player.y_v = -10;
       }
     } else if (player.wall) {
-        player.y_v = 0;
+      player.y_v = 0;
       if (keys.up) {
-        player.y_v = -2.5;
+        player.y_v = -5;
       }
       if (keys.down) {
-        player.y_v = 2.5;
+        player.y_v = 5;
       }
       if (keys.jump) {
-          player.y_v = -10;
-          player.wall = false;
-          player.ground = true;
+        player.y_v = -10;
+        if (keys.left) {
+          player.x_v = -7.5;
+        }
+        if (keys.right) {
+          player.x_v = 7.5;
+        }
+        player.wall = false;
+        player.ground = true;
       }
     }
 
@@ -151,49 +157,47 @@
     let collide = -1;
     for (let i = 0; i < platforms.length; i++) {
       if((platforms[i].x < player.x) && ((player.x + player.width) < (platforms[i].x + platforms[i].width)) &&
-          (platforms[i].y < (player.y + player.height)) && ((player.y + player.height) < (platforms[i].y + platforms[i].height))){
+        (platforms[i].y < (player.y + player.height)) && ((player.y + player.height) < (platforms[i].y + platforms[i].height))){
         collide = i;
-        player.wall = false;
         player.ground = true;
       }
     }
-      if (collide > -1) {
-          player.jump = false;
-          player.y = platforms[collide].y - player.height;
-      }
+    if (collide > -1) {
+      player.jump = false;
+      player.y = platforms[collide].y - player.height;
+    }
 
     // x collision
-      if (!player.wall) {
-          let wallCollide = false;
-          for (let i = 0; i < platforms.length; i++) {
-              if((platforms[i].y < player.y) && ((player.y + player.height) < (platforms[i].y + platforms[i].height)) &&
-                  (platforms[i].x < player.x) && (player.x < (platforms[i].x + platforms[i].width))) {
-                  wallCollide = true;
-                  player.x_v = 0;
-                  player.x = platforms[i].x + platforms[i].width;
-                  if (player.jump) {
-                      player.y_v = 0;
-                      player.wall = true;
-                      player.ground = false;
-                  }
-              }
-              if ((platforms[i].y < player.y) && ((player.y + player.height) < (platforms[i].y + platforms[i].height)) &&
-                  (platforms[i].x < player.x + player.width) && (player.x < (platforms[i].x + platforms[i].width))) {
-                  wallCollide = true;
-                  player.x_v = 0;
-                  player.x = platforms[i].x - player.width;
-                  if (player.jump) {
-                      player.y_v = 0;
-                      player.wall = true;
-                      player.ground = false;
-                  }
-              }
+    let wallCollide = false;
+    for (let i = 0; i < platforms.length; i++) {
+      if ((platforms[i].y < player.y) && ((player.y + player.height) < (platforms[i].y + platforms[i].height))) {
+        if ((platforms[i].x < player.x) && (player.x <= (platforms[i].x + platforms[i].width))) {
+          wallCollide = true;
+          player.x_v = 0;
+          player.x = platforms[i].x + platforms[i].width;
+          if (player.jump) {
+            player.y_v = 0;
+            player.wall = true;
+            player.ground = false;
           }
-          if (!wallCollide) {
-              player.wall = false;
-              player.ground = true;
+        }
+        if ((platforms[i].x <= player.x + player.width) && (player.x < (platforms[i].x + platforms[i].width))) {
+          wallCollide = true;
+          player.x_v = 0;
+          player.x = platforms[i].x - player.width;
+          if (player.jump) {
+            player.y_v = 0;
+            player.wall = true;
+            player.ground = false;
           }
+        }
       }
+    }
+    if (!wallCollide) {
+      player.wall = false;
+      player.ground = true;
+    }
+
 
     // Rendering the canvas, the player and the platforms
     rendercanvas();
