@@ -167,8 +167,6 @@
         player.y += player.y_v;
         player.x += player.x_v;
 
-        player.jump = true;
-
         // Checks for collisions with the platform
         let collide = -1;
         for (let i = 0; i < platforms.length; i++) {
@@ -179,7 +177,7 @@
             }
         }
         if (collide > -1) {
-            player.jump = false;
+            player.ground = false;
             player.y = platforms[collide].y - player.height;
         }
 
@@ -191,26 +189,30 @@
                     wallCollide = true;
                     player.x_v = 0;
                     player.x = platforms[i].x + platforms[i].width;
-                    if (player.right) {
-                        flipPlayer();
-                    }
-                    if (player.jump) {
+                    if (player.ground) {
                         player.y_v = 0;
                         player.wall = true;
                         player.ground = false;
+                    }
+                    if (player.right) {
+                        flipPlayer();
+                    } else {
+                        restPlayer();
                     }
                 }
                 if ((platforms[i].x <= player.x + player.width) && (player.x < (platforms[i].x + platforms[i].width))) {
                     wallCollide = true;
                     player.x_v = 0;
                     player.x = platforms[i].x - player.width;
-                    if (player.left) {
-                        flipPlayer();
-                    }
-                    if (player.jump) {
+                    if (player.ground) {
                         player.y_v = 0;
                         player.wall = true;
                         player.ground = false;
+                    }
+                    if (player.left) {
+                        flipPlayer();
+                    } else {
+                      restPlayer();
                     }
                 }
             }
@@ -228,7 +230,7 @@
     }
     function flipPlayer() {
         if (player.right) {
-            if (player.jump) {
+            if (player.ground) {
                 playerImage = document.getElementById("playerJL");
             } else {
                 playerImage = document.getElementById("playerL");
@@ -236,7 +238,7 @@
             player.right = false;
             player.left = true;
         } else {
-            if (player.jump) {
+            if (player.ground) {
                 playerImage = document.getElementById("playerJR");
             } else {
                 playerImage = document.getElementById("playerR");
@@ -244,6 +246,13 @@
             player.right = true;
             player.left = false;
         }
+    }
+    function restPlayer() {
+      if (player.right) {
+        playerImage = document.getElementById("playerR");
+      } else {
+        playerImage = document.getElementById("playerL");
+      }
     }
     canvas=document.getElementById("canvas");
     ctx=canvas.getContext("2d");
