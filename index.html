@@ -39,6 +39,7 @@
     let meteorImage = document.getElementById("meteor");
     var frameCounter = 0;
     let start = false;
+    let points = 0;
     var player = {
         x: 200,
         y: 400,
@@ -50,7 +51,7 @@
         left: true,
         right: false,
         height: 128,
-        width: 79
+        width: 79,
     };
     // The status of the arrow keys
     var keys = {
@@ -112,6 +113,8 @@
       ctx.fillText("Use WASD to move, and Space to jump off the rockets and use your jetpack!", (cWidth * 0.6), (cHeight * 0.4));
       ctx.fillText("Avoid the asteroids and try to get the highest score!", (cWidth * 0.6), (cHeight * 0.4 + 40));
       ctx.fillText("We recommend you press F11 for fullscreen mode!", (cWidth * 0.6), (cHeight * 0.4 + 80));
+      ctx.font = "36px Arial";
+      ctx.fillText("POINTS: " + points, 300, 40);
     }
     //function to create meteors
     function createMeteors() {
@@ -216,6 +219,7 @@
       ctx.canvas.width = cWidth;
         if (start) {
           frameCounter++;
+          points++;
           // If the player is not jumping apply the effect of friction
           if(player.jump == false) {
             player.x_v *= friction;
