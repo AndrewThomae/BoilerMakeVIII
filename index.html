@@ -1,15 +1,16 @@
 <html>
 <head>
 </head>
-<audio controls autoplay loop>
-    <source src="https://raw.githubusercontent.com/AndrewThomae/BoilerMakeVIII/main/img/Spacewalk.mp3?raw=true" type="audio/mpeg">
-</audio>
 <img id="playerR" width="256" height="256" src="https://i.imgur.com/S57zW2Z.png" style="display: none;">
 <img id="playerL" width="256" height="256" src="https://i.imgur.com/NmQg4Fc.png" style="display: none;">
 <img id="playerJR" width="256" height="256" src="https://i.imgur.com/MMqC5ai.png" style="display: none;">
 <img id="playerJL" width="256" height="256" src="https://i.imgur.com/uvBHziq.png" style="display: none;">
 <img id="rocket" width="256" height="1024" src="https://i.imgur.com/3idXYCq.png" style="display: none;">
 <img id="meteor" width="128" height="128" src="https://i.imgur.com/Du26Xlu.png" style="display: none;">
+<img id="playerJetR" width="256" height="256" src="https://i.imgur.com/yu0YydF.png" style="display: none;">
+<img id="playerJetL" width="256" height="256" src="https://i.imgur.com/LCUOLdN.png" style="display: none;">
+<img id="startButton" width="256" height="256" src="https://i.imgur.com/vWejMnc.png" style="display: none;">
+
 <canvas id="canvas"></canvas>
 <style>
     html {
@@ -17,11 +18,26 @@
     }
 </style>
 <script>
+      function sound(src) {
+        this.sound = document.createElement("audio");
+        this.sound.src = src;
+        this.sound.setAttribute("preload", "auto");
+        this.sound.setAttribute("controls", "none");
+        this.sound.style.display = "none";
+        document.body.appendChild(this.sound);
+        this.play = function(){
+          this.sound.play();
+        }
+        this.stop = function(){
+          this.sound.pause();
+        }
+      }
     // The attributes of the player.
     let playerImage = document.getElementById("playerL");
     let rocketImage = document.getElementById("rocket");
     let meteorImage = document.getElementById("meteor");
     var frameCounter = 0;
+    let start = false;
     var player = {
         x: 200,
         y: 400,
@@ -135,25 +151,37 @@
             ctx.drawImage(meteorImage, meteors[i].x, meteors[i].y);
         }
     }
+    function startGame() {
+      if (!start) {
+        start = true;
+        music = new sound("img/Spacewalk.mp3");
+        music.play();
+      }
+    }
     // This function will be called when a key on the keyboard is pressed
     function keydown(e) {
         // 37 is the code for the left arrow key
         if(e.keyCode == 65) {
+            startGame();
             keys.left = true;
         }
         // 38 is the code for the up arrow key
         if(e.keyCode == 87) {
+            startGame();
             keys.up = true;
         }
         // 39 is the code for the right arrow key
         if(e.keyCode == 68) {
+            startGame();
             keys.right = true;
         }
         // 40 is the code for the down arrow key
         if (e.keyCode == 83) {
+            startGame();
             keys.down = true;
         }
         if (e.keyCode == 32) {
+            startGame();
             keys.jump = true;
         }
     }
@@ -177,142 +205,144 @@
     }
 
     function loop() {
-        frameCounter++;
-        // If the player is not jumping apply the effect of friction
-        if(player.jump == false) {
+        if (start) {
+          frameCounter++;
+          // If the player is not jumping apply the effect of friction
+          if(player.jump == false) {
             player.x_v *= friction;
             player.y_v *= friction;
-        } else if (!player.wall) {
+          } else if (!player.wall) {
             // If the player is in the air then apply the effect of gravity
             if (keys.jump) {
               player.y_v += (gravity / 3);
             } else {
               player.y_v += gravity;
             }
-        }
-
-        // see if a platform should be bumped
-        for (let i = 0; i < platforms.length; i++) {
-          if (platforms[i].y > cHeight) {
-            platforms[i].y -= 2000;
           }
-        }
 
-        // Ground movement
-        if (player.ground) {
+          // see if a platform should be bumped
+          for (let i = 0; i < platforms.length; i++) {
+            if (platforms[i].y > cHeight) {
+              platforms[i].y -= 2000;
+            }
+          }
+
+          // Ground movement
+          if (player.ground) {
             if(keys.left) {
-                player.x_v = 0 - playerVel;
-                if (player.right) {
-                    flipPlayer();
-                }
+              player.x_v = 0 - playerVel;
+              if (player.right) {
+                flipPlayer();
+              }
             } else if(keys.right) {
-                player.x_v = playerVel;
-                if (player.left) {
-                    flipPlayer();
-                }
+              player.x_v = playerVel;
+              if (player.left) {
+                flipPlayer();
+              }
             } else {
               player.x_v *= 0.95;
             }
             if(keys.jump && !player.jump) {
-                player.y_v = (0 - 1.4) * playerVel;
+              player.y_v = (0 - 1.4) * playerVel;
             }
-        } else if (player.wall) {
+          } else if (player.wall) {
             if (keys.up) {
               player.y_v = (0 - 1.5) * rocketVel;
             } else if (keys.down) {
-                player.y_v = rocketVel;
+              player.y_v = rocketVel;
             } else {
               player.y_v = 0;
             }
             if (keys.jump) {
-                if (player.right && !keys.right) {
-                    player.y_v = (0 - 1.4) * playerVel;
-                    player.x_v = 0 - playerVel;
-                }
-                if (player.left && !keys.left) {
-                    player.y_v = (0 - 1.4) * playerVel;
-                    player.x_v = playerVel;
-                }
-                player.wall = false;
-                player.ground = true;
+              if (player.right && !keys.right) {
+                player.y_v = (0 - 1.4) * playerVel;
+                player.x_v = 0 - playerVel;
+              }
+              if (player.left && !keys.left) {
+                player.y_v = (0 - 1.4) * playerVel;
+                player.x_v = playerVel;
+              }
+              player.wall = false;
+              player.ground = true;
             }
-        }
+          }
 
-        // Updating the y and x coordinates of the player
-        player.y += player.y_v;
-        player.x += player.x_v;
+          // Updating the y and x coordinates of the player
+          player.y += player.y_v;
+          player.x += player.x_v;
 
-        // Gradually increase difficulty
-        gravity += 0.001;
-        playerVel += 0.003;
-        rocketVel += 0.003;
+          // Gradually increase difficulty
+          gravity += 0.001;
+          playerVel += 0.003;
+          rocketVel += 0.003;
 
-        // Update y coordinates of the platforms
-        for (let i = 0; i < platforms.length; i++) {
-          platforms[i].y += rocketVel;
-        }
+          // Update y coordinates of the platforms
+          for (let i = 0; i < platforms.length; i++) {
+            platforms[i].y += rocketVel;
+          }
 
-        // Make player follow rocket if mounted
-        if (player.wall) {
-          player.y += rocketVel;
-        }
+          // Make player follow rocket if mounted
+          if (player.wall) {
+            player.y += rocketVel;
+          }
 
-        // x collision
-        let wallCollide = false;
-        for (let i = 0; i < platforms.length; i++) {
+          // x collision
+          let wallCollide = false;
+          for (let i = 0; i < platforms.length; i++) {
             if ((platforms[i].y < (player.y)) && (player.y < (platforms[i].y + platforms[i].height))) {
-                if ((platforms[i].x < player.x) && (player.x <= (platforms[i].x + platforms[i].width))) {
-                    wallCollide = true;
-                    player.x_v = 0;
-                    player.x = platforms[i].x + platforms[i].width;
-                    if (player.ground) {
-                        player.y_v = 0;
-                        player.wall = true;
-                        player.ground = false;
-                    }
-                    if (player.right) {
-                        flipPlayer();
-                    } else {
-                        restPlayer();
-                    }
+              if ((platforms[i].x < player.x) && (player.x <= (platforms[i].x + platforms[i].width))) {
+                wallCollide = true;
+                player.x_v = 0;
+                player.x = platforms[i].x + platforms[i].width;
+                if (player.ground) {
+                  player.y_v = 0;
+                  player.wall = true;
+                  player.ground = false;
                 }
-                if ((platforms[i].x <= player.x + player.width) && (player.x < (platforms[i].x + platforms[i].width))) {
-                    wallCollide = true;
-                    player.x_v = 0;
-                    player.x = platforms[i].x - player.width;
-                    if (player.ground) {
-                        player.y_v = 0;
-                        player.wall = true;
-                        player.ground = false;
-                    }
-                    if (player.left) {
-                        flipPlayer();
-                    } else {
-                      restPlayer();
-                    }
+                if (player.right) {
+                  flipPlayer();
+                } else {
+                  restPlayer();
                 }
+              }
+              if ((platforms[i].x <= player.x + player.width) && (player.x < (platforms[i].x + platforms[i].width))) {
+                wallCollide = true;
+                player.x_v = 0;
+                player.x = platforms[i].x - player.width;
+                if (player.ground) {
+                  player.y_v = 0;
+                  player.wall = true;
+                  player.ground = false;
+                }
+                if (player.left) {
+                  flipPlayer();
+                } else {
+                  restPlayer();
+                }
+              }
             }
-        }
-        if (!wallCollide) {
+          }
+          if (!wallCollide) {
             player.wall = false;
             player.ground = true;
-        }
+          }
 
-      player.jump = true;
-      // Checks for vertical collisions with the platform
-      let collide = -1;
-      for (let i = 0; i < platforms.length; i++) {
-        if((platforms[i].x < (player.x + player.width)) && (player.x < (platforms[i].x + platforms[i].width)) &&
-          (platforms[i].y < (player.y + player.height)) && ((player.y + player.height) < (platforms[i].y + platforms[i].height))){
-          collide = i;
-          player.ground = true;
-          player.jump = false;
+          player.jump = true;
+          // Checks for vertical collisions with the platform
+          let collide = -1;
+          for (let i = 0; i < platforms.length; i++) {
+            if((platforms[i].x < (player.x + player.width)) && (player.x < (platforms[i].x + platforms[i].width)) &&
+              (platforms[i].y < (player.y + player.height)) && ((player.y + player.height) < (platforms[i].y + platforms[i].height))){
+              collide = i;
+              player.ground = true;
+              player.jump = false;
+            }
+          }
+          if (collide > -1) {
+            player.ground = false;
+            player.y = platforms[collide].y - player.height;
+          }
         }
-      }
-      if (collide > -1) {
-        player.ground = false;
-        player.y = platforms[collide].y - player.height;
-      }
 
       //check if player has collided with a meteor
       for (i = 0; i < numMeteors; i++) {
