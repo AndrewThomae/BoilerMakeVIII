@@ -155,7 +155,7 @@
     function startGame() {
       if (!start) {
         start = true;
-        music = new sound("img/Spacewalk.mp3");
+        music = new sound("https://raw.githubusercontent.com/AndrewThomae/BoilerMakeVIII/main/img/Spacewalk.mp3");
         music.play();
       }
     }
@@ -261,7 +261,7 @@
                 flipPlayer();
                 player.y_v = (0 - 1.4) * playerVel;
                 player.x_v = 0 - playerVel;
-              } else  if (player.left && !keys.left) {
+              } else if (player.left && !keys.left) {
                 flipPlayer();
                 player.y_v = (0 - 1.4) * playerVel;
                 player.x_v = playerVel;
