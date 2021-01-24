@@ -38,21 +38,21 @@
         up: false,
         down: false
     };
-    // The meteors
-    var meteors = [];
-    var numMeteors = 4;
-    var meteorRandomX = [0, cWidth / 5, 2 * cWidth / 5, 3 * cWidth / 5, 4 * cWidth / 5, cwidth];
     // The friction and gravity to show realistic movements
     var gravity = 0.4;
     var friction = 0;
     let rocketVel = 3;
     let playerVel = 10;
     // The number of platforms
-    var numPlatforms = 2;
+    var numPlatforms = 4;
     // The platforms
     var platforms = [];
     let cWidth = 1525;
     let cHeight = 840;
+    // The meteors
+    var meteors = [];
+    var numMeteors = 4;
+    var meteorRandomX = [0, cWidth / 5, 2 * cWidth / 5, 3 * cWidth / 5, 4 * cWidth / 5, cWidth];
     // Function to render the canvas
     function rendercanvas(){
         ctx.fillStyle = "#000000";
@@ -87,6 +87,7 @@
       ctx.fillText("gravity: " + gravity.toFixed(3), 0, 20);
       ctx.fillText("playerVel: " + playerVel.toFixed(3), 0, 50);
       ctx.fillText("rocketVel: " + rocketVel.toFixed(3), 0, 80);
+    }
     //function to create meteors
     function createMeteors() {
         for (i = 0; i < numMeteors; i++) {
